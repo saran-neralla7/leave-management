@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-on-surface min-h-screen;
+    font-family: 'Inter', sans-serif;
+  }
+  h1, h2, h3, .headline-font {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .bg-blue-purple-gradient {
+    background: linear-gradient(45deg, #0058bb, #6a37d4);
+  }
+}
+
+@layer utilities {
+  input:focus ~ label,
+  input:not(:placeholder-shown) ~ label,
+  textarea:focus ~ label,
+  textarea:not(:placeholder-shown) ~ label,
+  select:focus ~ label,
+  select:not([value=""]):valid ~ label {
+    transform: translateY(-1.5rem) scale(0.85);
+    color: #0058bb;
+  }
+}

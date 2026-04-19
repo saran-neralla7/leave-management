@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StaffPortal - Add Entry</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#6a37d4",
+                    "error-container": "#fb5151",
+                    "on-primary-container": "#00214f",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#6c9fff",
+                    "on-primary-fixed": "#000000",
+                    "background": "#f5f7f9",
+                    "primary": "#0058bb",
+                    "surface-container-highest": "#d9dde0",
+                    "on-surface": "#2c2f31",
+                    "error": "#b31b25",
+                    "on-tertiary-container": "#004b58",
+                    "on-primary": "#f0f2ff",
+                    "tertiary-fixed-dim": "#40ceed",
+                    "surface-dim": "#d0d5d8",
+                    "secondary-fixed-dim": "#ceb9ff",
+                    "primary-container": "#6c9fff",
+                    "outline-variant": "#abadaf",
+                    "surface-container-high": "#dfe3e6",
+                    "surface": "#f5f7f9",
+                    "inverse-on-surface": "#9a9d9f",
+                    "error-dim": "#9f0519",
+                    "outline": "#747779",
+                    "secondary-container": "#dac9ff",
+                    "on-tertiary-fixed": "#003640",
+                    "on-secondary": "#f8f0ff",
+                    "tertiary-fixed": "#53ddfc",
+                    "tertiary-container": "#53ddfc",
+                    "on-secondary-fixed": "#40009b",
+                    "on-primary-fixed-variant": "#002a61",
+                    "tertiary-dim": "#005867",
+                    "tertiary": "#006576",
+                    "on-error-container": "#570008",
+                    "inverse-surface": "#0b0f10",
+                    "on-secondary-fixed-variant": "#5f28c8",
+                    "surface-variant": "#d9dde0",
+                    "on-error": "#ffefee",
+                    "on-tertiary-fixed-variant": "#005564",
+                    "on-background": "#2c2f31",
+                    "on-secondary-container": "#5517bf",
+                    "surface-container-low": "#eef1f3",
+                    "surface-bright": "#f5f7f9",
+                    "secondary-dim": "#5e26c7",
+                    "surface-tint": "#0058bb",
+                    "inverse-primary": "#4b8eff",
+                    "primary-fixed-dim": "#5191ff",
+                    "on-surface-variant": "#595c5e",
+                    "secondary-fixed": "#dac9ff",
+                    "primary-dim": "#004ca4",
+                    "on-tertiary": "#def7ff",
+                    "surface-container": "#e5e9eb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "xxl": "1.25rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-blue-purple-gradient {
+            background: linear-gradient(45deg, #0058bb, #6a37d4);
+        }
+        input:focus ~ label,
+        input:not(:placeholder-shown) ~ label,
+        textarea:focus ~ label,
+        textarea:not(:placeholder-shown) ~ label,
+        select:focus ~ label,
+        select:not([value=""]):valid ~ label {
+            transform: translateY(-1.5rem) scale(0.85);
+            color: #0058bb;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="shadow-sm bg-white/70 backdrop-blur-xl dark:bg-slate-900/70 docked full-width top-0 rounded-b-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden ring-2 ring-primary-container">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="professional portrait of a young male staff member with a friendly expression in a modern office setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPG1ghgIB6d-ex3-Na8WdoX1cOOPQ2cMtYqu8y2PkNZ9bxdNPXo4s7WYg6s7xaTk7NpQxXysYoEpYpXvCf4aM6onLzhKv4XmlLU8aJ8dXoB_hUwxLOEbEIUrFqo8fJ7IMawbln3Xjf_3hiqH0U2v-QkhGldFUKEuc5yp0xepsWa6-scqzhccahxADtA8LxrTcxVH_j3_Wh3DDuA-gLSwWRq0EB6FfGF6sWMQDem84QgWya6aBNcYCB6RdCnNkR_CsUHihIeCMlBSqG"/>
+</div>
+<span class="text-xl font-extrabold tracking-tighter text-blue-700 dark:text-blue-400 font-headline">StaffPortal</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="material-symbols-outlined p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100/50 dark:hover:bg-slate-800/50 transition-colors rounded-full transition-transform duration-200 active:scale-90">
+                notifications
+            </button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto px-6 py-8">
+<!-- Editorial Header -->
+<div class="mb-10">
+<h1 class="font-headline font-extrabold text-4xl tracking-tight text-on-surface mb-2">New Request</h1>
+<p class="text-on-surface-variant font-medium">Log your leave or overtime hours with precision.</p>
+</div>
+<!-- Segmented Control -->
+<div class="bg-surface-container-low p-1.5 rounded-xxl mb-8 flex items-center">
+<button class="flex-1 py-3 text-sm font-bold rounded-xl bg-surface-container-lowest text-primary shadow-sm transition-all duration-300">
+                Leave Entry
+            </button>
+<button class="flex-1 py-3 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors">
+                Holiday Work Entry
+            </button>
+</div>
+<!-- Glass Form Panel -->
+<div class="glass-panel p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-white/40">
+<form class="space-y-10">
+<!-- Date Range Picker Style Field -->
+<div class="grid grid-cols-2 gap-6">
+<div class="relative group">
+<input class="peer w-full h-14 bg-surface-container-highest border-none rounded-xl px-4 pt-4 text-on-surface font-semibold focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" id="start_date" name="start_date" placeholder=" " required="" type="date"/>
+<label class="absolute left-4 top-4 text-on-surface-variant pointer-events-none transition-all duration-200 origin-left" for="start_date">Start Date</label>
+</div>
+<div class="relative group">
+<input class="peer w-full h-14 bg-surface-container-highest border-none rounded-xl px-4 pt-4 text-on-surface font-semibold focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" id="end_date" name="end_date" placeholder=" " required="" type="date"/>
+<label class="absolute left-4 top-4 text-on-surface-variant pointer-events-none transition-all duration-200 origin-left" for="end_date">End Date</label>
+</div>
+</div>
+<!-- Leave Type Dropdown -->
+<div class="relative group">
+<select class="peer w-full h-14 bg-surface-container-highest border-none rounded-xl px-4 pt-4 text-on-surface font-semibold focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all appearance-none" id="leave_type" name="leave_type" required="">
+<option disabled="" selected="" value=""></option>
+<option value="CL">Casual Leave (CL)</option>
+<option value="SL">Sick Leave (SL)</option>
+<option value="EL">Earned Leave (EL)</option>
+</select>
+<label class="absolute left-4 top-4 text-on-surface-variant pointer-events-none transition-all duration-200 origin-left" for="leave_type">Leave Category</label>
+<span class="material-symbols-outlined absolute right-4 top-4 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<!-- Availability Ribbon Concept (UI Polish) -->
+<div class="bg-surface-container-low/50 rounded-xxl p-5 flex items-center justify-between border border-white/20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container">info</span>
+</div>
+<div>
+<p class="text-[12px] font-bold text-on-surface-variant uppercase tracking-wider">Quota Remaining</p>
+<p class="text-lg font-extrabold text-on-surface">12.5 Days</p>
+</div>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/20"></div>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
+<img alt="colleague" class="w-full h-full object-cover" data-alt="avatar of a female professional" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUq-4kvgsYZYs7R2Eq49ynCU3xFtzpIWpskDGEQJofdw5x44Q3q7l6MiKnpkkhse7RXQzqrLx2YGWjcdeKPxVtEvYhWa2QxIeZBoMU96AlJLju_GEDxQ_YVgHaXaW_Q3KAagCoW3OGWPdTSr1B8WB5Hx4AoBCHbfUMVrtGLuRRIlN17iGuK7bsC6en62r0LX4QkD9vfzYr4d3eCE8ne95l6b1O7nFd1PxXF5RP3S0M2aa_LFXQoIM0uJ4Y6flQfO0OMKm0InimLcnP"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
+<img alt="colleague" class="w-full h-full object-cover" data-alt="avatar of a male professional" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmYYiP5sHJ_tMWbftqblXkhb_1csk6cWqNZr_BgO1Km6ArHYFNJtq55GwfWUTrk6pkXZbbzvCd60JcbNZb4f6Er9BoswTMRzC4Kt0MVB3L2GJY1NQT0q7fzwFeMtbWcc5xacyA3nDESjYTzW0YmkHDuIDj-63Ld4b7rAqTd87prUE4-5T_XStPoKmyKaLnTZTpWxHdaYhz48VKvdeNLwJqLvpIGoSsL_AFPg-cQ5I2QBBlFd0S8C9Co9_hX4ouTU-qb63z3kfPZLNT"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-high flex items-center justify-center text-[10px] font-bold text-on-surface-variant">
+                            +2
+                        </div>
+</div>
+</div>
+<!-- Reason Textarea -->
+<div class="relative group">
+<textarea class="peer w-full bg-surface-container-highest border-none rounded-xl px-4 pt-8 text-on-surface font-medium focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" id="reason" name="reason" placeholder=" " rows="3"></textarea>
+<label class="absolute left-4 top-4 text-on-surface-variant pointer-events-none transition-all duration-200 origin-left" for="reason">Reason for Leave (Optional)</label>
+</div>
+<!-- Action Button -->
+<button class="w-full bg-blue-purple-gradient text-on-primary py-5 rounded-[1.5rem] font-bold text-lg shadow-xl shadow-blue-500/20 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3" type="submit">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+                    Submit Entry
+                </button>
+</form>
+</div>
+</main>
+<!-- BottomNavBar (Shared Component Logic) -->
+<nav class="bg-white/80 backdrop-blur-2xl dark:bg-slate-900/80 fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] rounded-t-[2rem]">
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 hover:text-blue-500 dark:hover:text-blue-300 active:scale-95 transition-all duration-300 ease-out">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold">Dashboard</span>
+</button>
+<button class="flex flex-col items-center justify-center text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20 rounded-2xl px-4 py-2 active:scale-95 transition-all duration-300 ease-out">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold">Entry</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 hover:text-blue-500 dark:hover:text-blue-300 active:scale-95 transition-all duration-300 ease-out">
+<span class="material-symbols-outlined">history</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold">History</span>
+</button>
+<button class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-2 hover:text-blue-500 dark:hover:text-blue-300 active:scale-95 transition-all duration-300 ease-out">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold">Summary</span>
+</button>
+</nav>
+</body></html>
