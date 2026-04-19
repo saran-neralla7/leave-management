@@ -7,7 +7,7 @@ export default function TopAppBar() {
   return (
     <header className="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50 bg-white/70 backdrop-blur-xl rounded-b-2xl shadow-sm">
       <div className="flex items-center gap-4">
-        <div className="text-xl font-extrabold tracking-tighter text-blue-700 headline-font">StaffPortal</div>
+        <div className="text-xl font-extrabold tracking-tighter text-blue-700 headline-font">GVPCDPGC(A)</div>
         <nav className="hidden md:flex gap-6 ml-12">
           {userData?.role === 'admin' ? (
             <NavLink

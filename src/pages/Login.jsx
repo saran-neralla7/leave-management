@@ -47,7 +47,7 @@ export default function Login() {
              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(108,159,255,0.2),transparent_70%)]"></div>
              <span className="material-symbols-outlined text-[32px] text-primary" style={{fontVariationSettings: "'FILL' 1"}}>group_work</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-on-surface headline-font tracking-tight">StaffPortal</h1>
+          <h1 className="text-3xl font-extrabold text-on-surface headline-font tracking-tight">GVPCDPGC(A)</h1>
           <p className="text-on-surface-variant font-medium mt-2">Leave & Compensation Management</p>
         </div>
 
