@@ -1,22 +1,50 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
+import { collection, onSnapshot, addDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 const LeavesContext = createContext();
 
 export function LeavesProvider({ children }) {
-  // Initial Mock State 
-  const [leaveEntries, setLeaveEntries] = useState([
-    { id: '1', start: '2024-01-10', end: '2024-01-14', duration: 4, type: 'CL', status: 'Approved', reason: 'Winter Vacation' }
-  ]);
-  const [compOffEntries, setCompOffEntries] = useState([
-    { id: '2', date: '2024-02-18', duration: 1, status: 'Approved', reason: 'Weekend Launch' }
-  ]);
+  const [leaveEntries, setLeaveEntries] = useState([]);
+  const [compOffEntries, setCompOffEntries] = useState([]);
 
-  const addLeave = (entry) => {
-    setLeaveEntries(prev => [{ id: Date.now().toString(), status: 'Pending', ...entry }, ...prev]);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "entries"), (snapshot) => {
+      const leaves = [];
+      const compOffs = [];
+      
+      snapshot.forEach((doc) => {
+        const data = { id: doc.id, ...doc.data() };
+        if (data.type === 'Holiday Work' || data.isCompOff) {
+          compOffs.push(data);
+        } else {
+          leaves.push(data);
+        }
+      });
+      
+      setLeaveEntries(leaves.sort((a,b) => (b.createdAt || '').localeCompare(a.createdAt || '')));
+      setCompOffEntries(compOffs.sort((a,b) => (b.createdAt || '').localeCompare(a.createdAt || '')));
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const addLeave = async (entry) => {
+    await addDoc(collection(db, "entries"), {
+      ...entry,
+      status: 'Pending',
+      createdAt: new Date().toISOString()
+    });
   };
 
-  const addCompOff = (entry) => {
-    setCompOffEntries(prev => [{ id: Date.now().toString(), status: 'Pending', ...entry }, ...prev]);
+  const addCompOff = async (entry) => {
+    await addDoc(collection(db, "entries"), {
+      ...entry,
+      type: 'Holiday Work',
+      isCompOff: true,
+      status: 'Pending',
+      createdAt: new Date().toISOString()
+    });
   };
 
   const stats = useMemo(() => {

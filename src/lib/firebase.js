@@ -3,13 +3,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  // TODO: Add your Firebase project configuration here
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyD3fkX37fhoA_65hh4sA4TWZ2tFYshFW3c",
+  authDomain: "leave-management-384c0.firebaseapp.com",
+  projectId: "leave-management-384c0",
+  storageBucket: "leave-management-384c0.firebasestorage.app",
+  messagingSenderId: "397881567517",
+  appId: "1:397881567517:web:1c12e4e93b6e71dc8bd9f4"
 };
 
 // Initialize Firebase
