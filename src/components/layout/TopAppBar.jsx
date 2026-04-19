@@ -9,30 +9,33 @@ export default function TopAppBar() {
       <div className="flex items-center gap-4">
         <div className="text-xl font-extrabold tracking-tighter text-blue-700 headline-font">StaffPortal</div>
         <nav className="hidden md:flex gap-6 ml-12">
-          {['Dashboard', 'Entry', 'History', 'Summary'].map((item) => (
+          {userData?.role === 'admin' ? (
             <NavLink
-              key={item}
-              to={item === 'Dashboard' ? '/' : `/${item.toLowerCase()}`}
+              to="/"
               className={({ isActive }) => 
                 isActive 
                   ? "text-blue-700 font-bold headline-font text-sm"
                   : "text-slate-500 hover:bg-slate-100/50 transition-colors px-3 py-1 rounded-lg text-sm headline-font"
               }
             >
-              {item}
+              Management Console
             </NavLink>
-          ))}
-          {userData?.role === 'admin' && (
-            <NavLink
-              to="/admin"
-              className={({ isActive }) => 
-                isActive 
-                  ? "text-blue-700 font-bold headline-font text-sm"
-                  : "text-slate-500 hover:bg-slate-100/50 transition-colors px-3 py-1 rounded-lg text-sm headline-font"
-              }
-            >
-              Admin Dashboard
-            </NavLink>
+          ) : (
+            <>
+              {['Dashboard', 'Entry', 'History', 'Summary'].map((item) => (
+                <NavLink
+                  key={item}
+                  to={item === 'Dashboard' ? '/' : `/${item.toLowerCase()}`}
+                  className={({ isActive }) => 
+                    isActive 
+                      ? "text-blue-700 font-bold headline-font text-sm"
+                      : "text-slate-500 hover:bg-slate-100/50 transition-colors px-3 py-1 rounded-lg text-sm headline-font"
+                  }
+                >
+                  {item}
+                </NavLink>
+              ))}
+            </>
           )}
         </nav>
       </div>

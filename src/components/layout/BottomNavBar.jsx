@@ -1,13 +1,17 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export default function BottomNavBar() {
+  const { userData } = useAuth();
   const links = [
     { name: 'Dashboard', icon: 'dashboard', path: '/' },
     { name: 'Entry', icon: 'add_circle', path: '/entry' },
     { name: 'History', icon: 'history', path: '/history' },
     { name: 'Summary', icon: 'analytics', path: '/summary' },
   ];
+
+  if (userData?.role === 'admin') return null;
 
   return (
     <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 backdrop-blur-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.05)] rounded-t-[2rem]">

@@ -10,10 +10,21 @@ import Login from './pages/Login';
 import { useAuth } from './context/AuthContext';
 
 export default function App() {
-  const { currentUser } = useAuth();
+  const { currentUser, userData } = useAuth();
   
   if (!currentUser) {
     return <Login />;
+  }
+
+  if (userData?.role === 'admin') {
+    return (
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    );
   }
 
   return (
