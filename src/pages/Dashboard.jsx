@@ -1,16 +1,19 @@
 import React from 'react';
 import { GlassCard } from '../components/ui/GlassCard';
 import { useLeaves } from '../context/LeavesContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
   const { stats } = useLeaves();
+  const { userData } = useAuth();
   return (
     <div className="pb-10">
       <section className="mb-12">
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface mb-2 headline-font">
-          Welcome back, <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Sarah</span>.
+          Welcome back, <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">{userData?.name || 'Staff'}</span>.
         </h1>
-        <p className="text-on-surface-variant max-w-lg font-medium">Your leave balance is up to date. You have 3 pending approvals for your team.</p>
+        {userData?.designation && <div className="inline-block px-3 py-1 bg-primary/10 text-primary font-bold text-xs uppercase tracking-widest rounded-lg mb-4 border border-primary/20">{userData.designation}</div>}
+        <p className="text-on-surface-variant max-w-lg font-medium">Your leave balance is up to date.</p>
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
