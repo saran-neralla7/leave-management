@@ -4,8 +4,41 @@ import { useLeaves } from '../context/LeavesContext';
 import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
-  const { stats } = useLeaves();
+  const { stats, leaveEntries, compOffEntries } = useLeaves();
   const { userData } = useAuth();
+
+  const allActivity = [...leaveEntries, ...compOffEntries]
+   .sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt))
+   .slice(0, 3);
+
+  const getIconData = (item) => {
+    if (item.isCompOff) return { icon: 'military_tech', bg: 'bg-primary-container/30', text: 'text-primary', label: 'Overtime' };
+    if (item.type === 'SL') return { icon: 'medical_services', bg: 'bg-secondary-container/30', text: 'text-secondary', label: 'Sick Leave' };
+    if (item.type === 'EL') return { icon: 'star', bg: 'bg-primary-container/30', text: 'text-primary', label: 'Earned Leave' };
+    return { icon: 'flight_takeoff', bg: 'bg-tertiary-container/30', text: 'text-tertiary', label: 'Casual Leave' };
+  };
+
+  const currentMonth = new Date().getMonth();
+  const last6Months = Array.from({length: 6}, (_, i) => {
+     const d = new Date();
+     d.setMonth(currentMonth - 5 + i);
+     return { month: d.getMonth(), label: d.toLocaleString('default', { month: 'short' }) };
+  });
+
+  const chartData = last6Months.map(m => {
+     let monthlyTotal = 0;
+     leaveEntries.forEach(entry => {
+        if (!entry.startDate) return;
+        const d = new Date(entry.startDate);
+        if (d.getMonth() === m.month) {
+           monthlyTotal += Number(entry.duration || 0);
+        }
+     });
+     return { ...m, total: monthlyTotal };
+  });
+  
+  const maxTotal = Math.max(...chartData.map(d => d.total), 3);
+
   return (
     <div className="pb-10">
       <section className="mb-12">
@@ -23,7 +56,7 @@ export default function Dashboard() {
             <div className="p-3 bg-primary-container/20 rounded-2xl">
               <span className="material-symbols-outlined text-primary text-3xl">event_available</span>
             </div>
-            <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50">Year 2024</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-on-surface-variant opacity-50">Year {new Date().getFullYear()}</span>
           </div>
           <div className="relative z-10">
             <h3 className="text-slate-500 text-sm font-semibold mb-1">Total Leaves Taken</h3>
@@ -43,9 +76,8 @@ export default function Dashboard() {
             <div className="w-12 h-12 relative flex items-center justify-center">
               <svg className="w-full h-full -rotate-90">
                 <circle className="text-slate-100" cx="24" cy="24" fill="transparent" r="20" stroke="currentColor" strokeWidth="4"></circle>
-                <circle className="text-secondary" cx="24" cy="24" fill="transparent" r="20" stroke="currentColor" strokeDasharray="125.6" strokeDashoffset="37.6" strokeWidth="4"></circle>
+                <circle className="text-secondary" cx="24" cy="24" fill="transparent" r="20" stroke="currentColor" strokeDasharray="125.6" strokeDashoffset={`${125.6 - (125.6 * (stats.remainingLeaves / (stats.initialQuota || 1)))}`} strokeWidth="4"></circle>
               </svg>
-              <span className="absolute text-[10px] font-bold text-secondary">70%</span>
             </div>
           </div>
           <div className="relative z-10">
@@ -83,34 +115,27 @@ export default function Dashboard() {
               <p className="text-on-surface-variant text-sm">Monthly insights on your vacation cycles</p>
             </div>
             <div className="flex gap-2">
-              <button className="px-4 py-2 bg-surface-container-lowest rounded-xl text-sm font-semibold shadow-sm text-primary">Monthly</button>
+              <button className="px-4 py-2 bg-surface-container-lowest rounded-xl text-sm font-semibold shadow-sm text-primary">6 Months</button>
             </div>
           </div>
           <div className="h-64 flex items-end justify-between gap-4 px-4">
-            <div className="flex flex-col items-center gap-4 flex-1 h-full justify-end">
-              <div className="w-full bg-primary/10 rounded-t-xl hover:bg-primary/20 transition-all duration-300" style={{height: '40%'}}></div>
-              <span className="text-xs font-bold text-on-surface-variant">Jan</span>
-            </div>
-            <div className="flex flex-col items-center gap-4 flex-1 h-full justify-end">
-              <div className="w-full bg-primary/10 rounded-t-xl hover:bg-primary/20 transition-all duration-300" style={{height: '60%'}}></div>
-              <span className="text-xs font-bold text-on-surface-variant">Feb</span>
-            </div>
-            <div className="flex flex-col items-center gap-4 flex-1 h-full justify-end">
-              <div className="w-full bg-primary/40 rounded-t-xl hover:bg-primary/50 transition-all duration-300" style={{height: '25%'}}></div>
-              <span className="text-xs font-bold text-on-surface-variant">Mar</span>
-            </div>
-            <div className="flex flex-col items-center gap-4 flex-1 h-full justify-end">
-              <div className="w-full bg-primary/10 rounded-t-xl hover:bg-primary/20 transition-all duration-300" style={{height: '45%'}}></div>
-              <span className="text-xs font-bold text-on-surface-variant">Apr</span>
-            </div>
-            <div className="flex flex-col items-center gap-4 flex-1 h-full justify-end">
-              <div className="w-full bg-primary-container rounded-t-xl hover:opacity-80 transition-all duration-300 shadow-[0_-8px_20px_rgba(108,159,255,0.3)]" style={{height: '90%'}}></div>
-              <span className="text-xs font-bold text-primary">May</span>
-            </div>
-            <div className="flex flex-col items-center gap-4 flex-1 h-full justify-end">
-              <div className="w-full bg-primary/10 rounded-t-xl hover:bg-primary/20 transition-all duration-300" style={{height: '35%'}}></div>
-              <span className="text-xs font-bold text-on-surface-variant">Jun</span>
-            </div>
+            {chartData.map((data, i) => {
+              const height = Math.max((data.total / maxTotal) * 100, 5);
+              const isActive = i === 5; // The current month
+              return (
+                <div key={data.label} className="flex flex-col items-center gap-4 flex-1 h-full justify-end group">
+                  <div 
+                    className={`w-full rounded-t-xl transition-all duration-300 relative ${isActive ? 'bg-primary shadow-[0_-8px_20px_rgba(108,159,255,0.3)] hover:opacity-80' : 'bg-primary/10 hover:bg-primary/20'}`} 
+                    style={{height: `${height}%`}}
+                  >
+                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface-container-highest text-on-surface text-xs font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                       {data.total}d
+                     </div>
+                  </div>
+                  <span className={`text-xs font-bold ${isActive ? 'text-primary' : 'text-on-surface-variant'}`}>{data.label}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
         <div className="lg:col-span-2 space-y-4">
@@ -119,31 +144,35 @@ export default function Dashboard() {
             <button className="text-primary text-sm font-semibold hover:underline">View All</button>
           </div>
           
-          <div className="bg-surface-container-lowest p-5 rounded-2xl flex items-center justify-between shadow-sm group hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-tertiary-container/30 rounded-xl flex items-center justify-center">
-                <span className="material-symbols-outlined text-tertiary">flight_takeoff</span>
-              </div>
-              <div>
-                <h4 className="font-bold text-sm">Summer Vacation</h4>
-                <p className="text-xs text-on-surface-variant">Aug 12 - Aug 19</p>
-              </div>
-            </div>
-            <span className="px-3 py-1 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold rounded-full">Approved</span>
-          </div>
-
-          <div className="bg-surface-container-lowest p-5 rounded-2xl flex items-center justify-between shadow-sm group hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-secondary-container/30 rounded-xl flex items-center justify-center">
-                <span className="material-symbols-outlined text-secondary">medical_services</span>
-              </div>
-              <div>
-                <h4 className="font-bold text-sm">Sick Leave</h4>
-                <p className="text-xs text-on-surface-variant">Jun 04, 2024</p>
-              </div>
-            </div>
-            <span className="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full">Pending</span>
-          </div>
+          {allActivity.length === 0 ? (
+             <div className="p-8 text-center text-on-surface-variant font-medium bg-surface-container-lowest rounded-2xl border border-dashed border-outline-variant/30">No recent activity detected.</div>
+          ) : (
+            allActivity.map((activity, i) => {
+              const display = getIconData(activity);
+              return (
+                <div key={i} className="bg-surface-container-lowest p-5 rounded-2xl flex items-center justify-between shadow-sm group hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 ${display.bg} rounded-xl flex items-center justify-center`}>
+                      <span className={`material-symbols-outlined ${display.text}`}>{display.icon}</span>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm">{display.label}</h4>
+                      <p className="text-xs text-on-surface-variant mt-0.5">
+                         {activity.isCompOff ? activity.date : `${activity.startDate} to ${activity.endDate}`}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase ${
+                    activity.status === 'Approved' ? 'bg-tertiary-container text-on-tertiary-container' : 
+                    activity.status === 'Declined' ? 'bg-error-container text-error' : 
+                    'bg-secondary-container text-on-secondary-container'
+                  }`}>
+                    {activity.status}
+                  </span>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 
