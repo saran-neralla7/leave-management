@@ -1,7 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export default function TopAppBar() {
+  const { userData, performLogout } = useAuth();
   return (
     <header className="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50 bg-white/70 backdrop-blur-xl rounded-b-2xl shadow-sm">
       <div className="flex items-center gap-4">
@@ -20,11 +22,23 @@ export default function TopAppBar() {
               {item}
             </NavLink>
           ))}
+          {userData?.role === 'admin' && (
+            <NavLink
+              to="/admin"
+              className={({ isActive }) => 
+                isActive 
+                  ? "text-blue-700 font-bold headline-font text-sm"
+                  : "text-slate-500 hover:bg-slate-100/50 transition-colors px-3 py-1 rounded-lg text-sm headline-font"
+              }
+            >
+              Admin Dashboard
+            </NavLink>
+          )}
         </nav>
       </div>
       <div className="flex items-center gap-4">
-        <button className="material-symbols-outlined text-slate-500 hover:bg-slate-100/50 p-2 rounded-full transition-colors">
-          notifications
+        <button onClick={performLogout} title="Sign Out" className="material-symbols-outlined text-error hover:bg-error-container/20 p-2 rounded-full transition-colors">
+          logout
         </button>
         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
           <img 

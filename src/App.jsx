@@ -5,8 +5,17 @@ import Dashboard from './pages/Dashboard';
 import AddEntry from './pages/AddEntry';
 import History from './pages/History';
 import Summary from './pages/Summary';
+import AdminDashboard from './pages/AdminDashboard';
+import Login from './pages/Login';
+import { useAuth } from './context/AuthContext';
 
 export default function App() {
+  const { currentUser } = useAuth();
+  
+  if (!currentUser) {
+    return <Login />;
+  }
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

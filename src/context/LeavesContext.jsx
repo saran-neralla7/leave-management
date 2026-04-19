@@ -1,15 +1,19 @@
 import React, { createContext, useContext, useState, useMemo, useEffect } from 'react';
-import { collection, onSnapshot, addDoc } from 'firebase/firestore';
+import { collection, onSnapshot, addDoc, query, where } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { useAuth } from './AuthContext';
 
 const LeavesContext = createContext();
 
 export function LeavesProvider({ children }) {
+  const { currentUser, userData } = useAuth();
   const [leaveEntries, setLeaveEntries] = useState([]);
   const [compOffEntries, setCompOffEntries] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "entries"), (snapshot) => {
+    if (!currentUser) return; // Prevent polling before Auth hydration
+    const q = query(collection(db, "entries"), where("uid", "==", currentUser.uid));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const leaves = [];
       const compOffs = [];
       
@@ -32,6 +36,7 @@ export function LeavesProvider({ children }) {
   const addLeave = async (entry) => {
     await addDoc(collection(db, "entries"), {
       ...entry,
+      uid: currentUser.uid,
       status: 'Pending',
       createdAt: new Date().toISOString()
     });
@@ -40,6 +45,7 @@ export function LeavesProvider({ children }) {
   const addCompOff = async (entry) => {
     await addDoc(collection(db, "entries"), {
       ...entry,
+      uid: currentUser.uid,
       type: 'Holiday Work',
       isCompOff: true,
       status: 'Pending',
@@ -48,9 +54,9 @@ export function LeavesProvider({ children }) {
   };
 
   const stats = useMemo(() => {
-    const totalCL = 12;
-    const totalSL = 10;
-    const totalEL = 10;
+    const totalCL = userData?.quotas?.CL ?? 0;
+    const totalSL = userData?.quotas?.SL ?? 0;
+    const totalEL = userData?.quotas?.EL ?? 0;
     const initialQuota = totalCL + totalSL + totalEL;
 
     const totalLeavesTaken = leaveEntries.reduce((total, entry) => total + entry.duration, 0);
